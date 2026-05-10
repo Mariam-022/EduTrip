@@ -4006,23 +4006,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ahmed\\.nuget\\packages\\": {},
+    "C:\\Users\\Mariam Refaiy\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Personal Folder\\Yomna\\Yomna project\\EduTrip.csproj",
+      "projectUniqueName": "C:\\Users\\Mariam Refaiy\\Source\\Repos\\EduTrip\\EduTrip.csproj",
       "projectName": "EduTrip",
-      "projectPath": "D:\\Personal Folder\\Yomna\\Yomna project\\EduTrip.csproj",
-      "packagesPath": "C:\\Users\\ahmed\\.nuget\\packages\\",
-      "outputPath": "D:\\Personal Folder\\Yomna\\Yomna project\\obj\\",
+      "projectPath": "C:\\Users\\Mariam Refaiy\\Source\\Repos\\EduTrip\\EduTrip.csproj",
+      "packagesPath": "C:\\Users\\Mariam Refaiy\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mariam Refaiy\\Source\\Repos\\EduTrip\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\ahmed\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Mariam Refaiy\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

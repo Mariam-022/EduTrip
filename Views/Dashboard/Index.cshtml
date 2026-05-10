@@ -1,0 +1,109 @@
+﻿@model List<EduTrip.Models.Booking>
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 style="color:#1F2A44;"> My Sessions</h3>
+    <a asp-controller="Mentor" asp-action="Index" class="btn btn-cta">
+        + Book New Session
+    </a>
+</div>
+
+<!-- Stats Row -->
+<div class="row g-3 mb-4">
+    @{
+        // Calculate stats from the model list right in the view
+        var confirmed = Model.Count(b => b.Status == "Confirmed");
+        var completed = Model.Count(b => b.Status == "Completed");
+        var totalSpent = Model.Sum(b => b.Order?.Amount ?? 0);
+    }
+    <div class="col-md-4">
+        <div class="card text-center p-3" style="border-top: 3px solid #3F8CCB;">
+            <h4 style="color:#3F8CCB;">@confirmed</h4>
+            <small class="text-muted">Upcoming Sessions</small>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3" style="border-top: 3px solid #F4C542;">
+            <h4 style="color:#F4C542;">@completed</h4>
+            <small class="text-muted">Completed Sessions</small>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3" style="border-top: 3px solid #6FB3E0;">
+            <h4 style="color:#1F2A44;">@totalSpent.ToString("C0") EGP</h4>
+            <small class="text-muted">Total Invested</small>
+        </div>
+    </div>
+</div>
+
+<!-- Bookings Table -->
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <div style="font-size:4rem;">📅</div>
+        <h5 class="text-muted mt-3">No sessions yet</h5>
+        <a asp-controller="Mentor" asp-action="Index" class="btn btn-edu mt-2">
+            Browse Mentors
+        </a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead style="background-color:#1F2A44; color:white;">
+                <tr>
+                    <th>Mentor</th>
+                    <th>Day & Time</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Booked On</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in Model)
+                {
+                    <tr>
+                        <!-- Mentor name from the nested Include chain -->
+                        <td>
+                            <strong>
+                                @booking.Mentor?.User?.FirstName @booking.Mentor?.User?.LastName
+                            </strong>
+                            <br />
+                            <small class="text-muted">@booking.Mentor?.Specialties?.Split(',')[0]</small>
+                        </td>
+
+                        <!-- Slot time from the Availability Include -->
+                        <td>
+                            @booking.Availability?.DayOfWeek
+                            <br />
+                            <small class="text-muted">
+                                @booking.Availability?.StartTime.ToString(@"hh\:mm")
+                            </small>
+                        </td>
+
+                        <!-- Status badge: Bootstrap colors based on status value -->
+                        <td>
+                            <span class="badge @(booking.Status == "Confirmed" ? "bg-primary"
+                                                                                : booking.Status == "Completed" ? "bg-success"
+                                                                                : booking.Status == "Cancelled" ? "bg-danger"
+                                                                                : "bg-secondary")">
+                        @booking.Status
+                    </span>
+                </td>
+
+                        <!-- Amount from the Order Include -->
+                        <td>@booking.Order?.Amount.ToString("C0") EGP</td>
+
+                        <!-- When it was created -->
+                        <td>@booking.CreatedAt?.ToString("dd MMM yyyy")</td>
+                    </tr>
+                        }
+            </tbody>
+        </table>
+    </div>
+}
