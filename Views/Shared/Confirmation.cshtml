@@ -1,0 +1,52 @@
+﻿@model EduTrip.Models.Booking
+
+@{
+    ViewData["Title"] = "Success - EduTrip";
+}
+
+<div class="text-center py-5">
+
+    <div class="mb-3" style="font-size:5.5rem; color: #28a745;">
+        <i class="bi bi-check-circle-fill"></i> ✅
+    </div>
+
+    <h2 style="color:#1F2A44; font-weight: 700;">Booking Confirmed</h2>
+    <p class="lead text-muted">Your session has been successfully scheduled and confirmed.</p>
+
+    <div class="card shadow-sm mx-auto mt-4" style="max-width:550px; border-left: 5px solid #F4C542; border-radius: 12px;">
+        <div class="card-body p-4 text-start">
+            <h5 class="fw-bold mb-3" style="color:#1F2A44;">Reservation Summary</h5>
+            <hr />
+
+            <div class="mb-2">
+                <strong>Mentor:</strong>
+                <span>@Model.Mentor?.User?.FirstName @Model.Mentor?.User?.LastName</span>
+            </div>
+
+            <div class="mb-2">
+                <strong>Schedule:</strong>
+                <span>@Model.Availability?.DayOfWeek, @Model.Availability?.StartTime.ToString(@"hh\:mm") – @Model.Availability?.EndTime.ToString(@"hh\:mm")</span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <strong>Status:</strong>
+                    <span class="badge bg-success px-3 py-2">@Model.Status</span>
+                </div>
+                <div class="text-end">
+                    <small class="text-muted d-block">Confirmation ID</small>
+                    <code class="text-dark fw-bold">@Model.Id.ToString().ToUpper().Substring(0, 8)</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-edu px-4 py-2 me-2">
+            Go to Dashboard
+        </a>
+        <a asp-controller="Mentor" asp-action="Index" class="btn btn-outline-secondary px-4 py-2">
+            Browse More Mentors
+        </a>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Confirm Booking";
+    var mentor = (EduTrip.Models.MentorProfile)ViewBag.Mentor;
+    var availability = (EduTrip.Models.MentorAvailability)ViewBag.Availability;
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+
+        <h3 style="color:#1F2A44;" class="mb-4">📅 Confirm Your Booking</h3>
+
+        <div class="card shadow-sm mb-4" style="border-left: 4px solid #3F8CCB;">
+            <div class="card-body">
+                <h5>Session Summary</h5>
+                <hr />
+                <p><strong>Mentor:</strong> @mentor.User.FirstName @mentor.User.LastName</p>
+                <p><strong>Day:</strong> @availability.DayOfWeek</p>
+                <p><strong>Time:</strong> @availability.StartTime.ToString(@"hh\:mm") – @availability.EndTime.ToString(@"hh\:mm")</p>
+                <p><strong>Duration:</strong> 60 minutes</p>
+                <p class="mb-0">
+                    <strong>Total:</strong>
+                    <span style="color:#3F8CCB; font-weight:bold; font-size:1.3rem;">
+                        @mentor.HourlyRate.ToString("C0") EGP
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <form asp-controller="Booking" asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="mentorId" value="@mentor.Id" />
+            <input type="hidden" name="availabilityId" value="@availability.Id" />
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Your Name</label>
+                <input type="text" name="studentName" class="form-control" required placeholder="Full Name" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Your Email</label>
+                <input type="email" name="studentEmail" class="form-control" required placeholder="email@example.com" />
+            </div>
+
+            <button type="submit" class="btn btn-cta w-100 py-3 mb-2" style="font-size:1.1rem;">
+                💳 Proceed to Payment
+            </button>
+
+            <a asp-controller="Mentor" asp-action="Index" class="btn btn-outline-secondary w-100">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
