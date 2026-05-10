@@ -1,0 +1,98 @@
+﻿@*
+    @model — THIS IS CRITICAL.
+    This line tells the View what TYPE of data the Controller sent.
+    List<MentorProfile> means: "I'm receiving a list of MentorProfile objects."
+    Without this line, VS won't give you autocomplete and @Model won't work.
+*@
+@model List<EduTrip.Models.MentorProfile>
+
+@{
+    ViewData["Title"] = "Browse Mentors";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 style="color: #1F2A44;">
+        👨‍🏫 Our Mentors
+    </h2>
+    <span class="badge" style="background-color: #3F8CCB; font-size: 1rem; padding: 8px 16px;">
+        @*
+            @Model.Count → calls .Count on the List<MentorProfile> the controller sent.
+            If there are 8 mentors, this shows: "8 Available"
+        *@
+        @Model.Count Available
+    </span>
+</div>
+
+<!-- Mentor Cards Grid -->
+<div class="row g-4">
+    @*
+        @foreach loops through the list the Controller gave us.
+        For each 'mentor' in the list, we create one Bootstrap card.
+        This is the VIEW side of "Controller sends data → View displays it."
+    *@
+    @foreach (var mentor in Model)
+    {
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 mentor-card">
+                <div class="card-body">
+                    
+                    <!-- Mentor Name -->
+                    <!-- mentor.User → we can access this BECAUSE we did .Include(m => m.User) in the Controller -->
+                    <!-- Without .Include(), this would be NULL and crash here -->
+                    <h5 class="card-title" style="color: #1F2A44;">
+                        @mentor.User.FirstName @mentor.User.LastName
+                    </h5>
+
+                    <!-- Specialties (from MentorProfiles.Specialties column) -->
+                    <p class="text-muted">
+                        <small>📚 @mentor.Specialties</small>
+                    </p>
+
+                    <!-- Bio (truncated to 100 chars using C# string method) -->
+                    <p class="card-text">
+                        @(mentor.Bio?.Length > 100 
+                            ? mentor.Bio.Substring(0, 100) + "..." 
+                            : mentor.Bio ?? "No bio available")
+                    </p>
+
+                    <!-- Bottom Row: Rate + Rating + Button -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        
+                        <div>
+                            <!-- HourlyRate from MentorProfiles table -->
+                            <span class="fw-bold" style="color: #3F8CCB;">
+                                @mentor.HourlyRate.ToString("C0") EGP/hr
+                            </span>
+                            <br/>
+                            <!-- AverageRating — might be null if no reviews yet -->
+                            <small class="text-muted">
+                                ⭐ @(mentor.AverageRating?.ToString("F1") ?? "New")
+                            </small>
+                        </div>
+
+                        <!--
+                            This link goes to: /Mentor/Details/{mentor.Id}
+                            asp-route-id="@mentor.Id" → puts the mentor's Guid ID in the URL.
+                            The MentorController.Details(Guid? id) will receive it.
+                        -->
+                        <a asp-controller="Mentor"
+                           asp-action="Details"
+                           asp-route-id="@mentor.Id"
+                           class="btn btn-edu">
+                            View Profile →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Show a message if no mentors exist yet -->
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <p class="text-muted">No approved mentors available yet. Check back soon!</p>
+    </div>
+}

@@ -1,0 +1,124 @@
+﻿<!-- Single mentor — NOT a List this time -->
+@model EduTrip.Models.MentorProfile
+
+@{
+    ViewData["Title"] = (Model?.User != null)
+        ? $"{Model.User.FirstName} {Model.User.LastName}"
+        : "Mentor Details";
+    // This sets the browser tab title dynamically, e.g., "Ahmed Hassan - EduTrip"
+
+    // Compute safe initials for avatar (defensive: handle null/empty names)
+    var initials = string.Empty;
+    if (!string.IsNullOrWhiteSpace(Model?.User?.FirstName)) initials += Model.User.FirstName.Substring(0, 1).ToUpper();
+    if (!string.IsNullOrWhiteSpace(Model?.User?.LastName)) initials += Model.User.LastName.Substring(0, 1).ToUpper();
+}
+
+<div class="row">
+
+    <!-- LEFT COLUMN: Mentor Info -->
+    <div class="col-md-4">
+        <div class="card shadow-sm p-4">
+            
+            <!-- Avatar placeholder using mentor's initials -->
+            <div class="text-center mb-3">
+                <div style="width:80px; height:80px; border-radius:50%;
+                            background: linear-gradient(135deg,#3F8CCB,#1F2A44);
+                            color:white; font-size:2rem; font-weight:bold;
+                            display:flex; align-items:center; justify-content:center;
+                            margin: 0 auto;">
+                    <!--
+                        Substring(0,1) gets the FIRST LETTER of each name.
+                        So "Ahmed Hassan" → "A" + "H" → "AH"
+                    -->
+                    @initials
+                </div>
+            </div>
+
+            <h4 class="text-center" style="color:#1F2A44;">
+                @Model.User.FirstName @Model.User.LastName
+            </h4>
+
+            <hr/>
+
+            <p><strong>📚 Specialties:</strong> @Model.Specialties</p>
+            <p><strong>💼 Experience:</strong> @Model.YearsExperience years</p>
+            <p><strong>💰 Rate:</strong> @Model.HourlyRate.ToString("C0") EGP/hr</p>
+            <p><strong>⭐ Rating:</strong> @(Model.AverageRating?.ToString("F1") ?? "No reviews yet")</p>
+            <p><strong>📧 Email:</strong> @Model.User.Email</p>
+
+            <hr/>
+
+            <p class="text-muted"><em>@Model.Bio</em></p>
+        </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Availability Slots -->
+    <div class="col-md-8">
+        <h4 style="color:#1F2A44;">📅 Available Time Slots</h4>
+        <p class="text-muted">Select a slot to book your session</p>
+
+        @* 
+            Model.MentorAvailabilities is the List<MentorAvailability>
+            we loaded with .Include(m => m.MentorAvailabilities) in the Controller.
+            .Where(a => !a.IsBooked) filters out already-booked slots RIGHT IN THE VIEW.
+        *@
+        @{
+            var freeSlots = (Model?.MentorAvailabilities ?? System.Linq.Enumerable.Empty<EduTrip.Models.MentorAvailability>())
+                                 .Where(a => !a.IsBooked)
+                                 .OrderBy(a => a.DayOfWeek)
+                                 .ToList();
+        }
+
+        @if (!freeSlots.Any())
+        {
+            <div class="alert alert-warning">
+                No available slots right now. Check back later!
+            </div>
+        }
+        else
+        {
+            <div class="row g-3">
+                @foreach (var slot in freeSlots)
+                {
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm p-3"
+                             style="border-left: 4px solid #6FB3E0 !important;">
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong style="color:#1F2A44;">@slot.DayOfWeek</strong>
+                                    <br/>
+                                    <small class="text-muted">
+                                        @*
+                                            slot.StartTime and slot.EndTime are TIME type from SQL.
+                                            Display format: "hh:mm" (e.g. "09:00")
+                                        *@
+                                        @(
+                                            slot.StartTime.ToString(@"hh\:mm")
+                                            + " — " +
+                                            slot.EndTime.ToString(@"hh\:mm")
+                                        )
+                                    </small>
+                                </div>
+
+                                <!--
+                                    When student clicks "Book This Slot":
+                                    Goes to: /Booking/Create?mentorId=...&availabilityId=...
+                                    Both IDs go into the URL as query parameters.
+                                    BookingController.Create will receive them.
+                                -->
+                                <a asp-controller="Booking"
+                                   asp-action="Create"
+                                   asp-route-mentorId="@Model.Id"
+                                   asp-route-availabilityId="@slot.Id"
+                                   class="btn btn-cta btn-sm">
+                                    Book
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
