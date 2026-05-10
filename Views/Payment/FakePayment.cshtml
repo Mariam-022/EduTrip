@@ -1,0 +1,81 @@
+﻿@model EduTrip.Models.Order
+
+@{
+    ViewData["Title"] = "Complete Payment";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h3 style="color:#1F2A44;">💳 Secure Payment</h3>
+            <p class="text-muted">Demo Mode — No real charges will be made</p>
+
+            <!-- Big amount display -->
+            <div style="background: linear-gradient(135deg,#1F2A44,#3F8CCB);
+                        border-radius:12px; padding:24px; color:white;">
+                <p class="mb-1 opacity-75">Total Due</p>
+                <h2 class="fw-bold mb-0">
+                    @Model.Amount.ToString("C0") EGP
+                </h2>
+                @if (Model.Mentor != null)
+                {
+                    <p class="mb-0 opacity-75 small mt-1">
+                        Session with @Model.Mentor.User.FirstName @Model.Mentor.User.LastName
+                    </p>
+                }
+            </div>
+        </div>
+
+        <!-- Fake Card Form -->
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+                <!--
+                    form posts to POST /Payment/FakePayment
+                    orderId goes as hidden field so the controller knows which order to pay
+                -->
+                <form method="post" asp-controller="Payment" asp-action="FakePayment">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="orderId" value="@Model.Id" />
+
+                    <!-- Fake card number — not actually processed -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Card Number</label>
+                        <input type="text" class="form-control"
+                               value="4242 4242 4242 4242"
+                               placeholder="4242 4242 4242 4242"
+                               maxlength="19" />
+                        <small class="text-muted">Use any number — this is a demo</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-bold">Expiry</label>
+                            <input type="text" class="form-control" value="12/28" placeholder="MM/YY" />
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-bold">CVV</label>
+                            <input type="text" class="form-control" value="123" placeholder="123" />
+                        </div>
+                    </div>
+
+                    <!--
+                        This button submits the form.
+                        The POST hits PaymentController.FakePayment(Guid orderId)
+                        which then marks everything as paid.
+                    -->
+                    <button type="submit" class="btn btn-cta w-100 py-3" style="font-size:1.1rem;">
+                        ✅ Pay @Model.Amount.ToString("C0") EGP — Confirm Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Security badges (decorative for demo) -->
+        <p class="text-center text-muted small mt-3">
+            🔒 Secured by EduTrip Payment Gateway
+        </p>
+    </div>
+</div>
