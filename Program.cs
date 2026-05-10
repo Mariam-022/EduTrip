@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using EduTrip.Models;
 namespace EduTrip
 {
     public class Program
@@ -5,6 +7,9 @@ namespace EduTrip
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            // Add services to the container.
+            builder.Services.AddDbContext<EduTripContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
