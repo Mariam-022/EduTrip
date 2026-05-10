@@ -3,111 +3,169 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!--
-        @ViewData["Title"] → Each page sets its own title.
-        Example: from the Mentor page, Title = "Browse Mentors"
-        This line picks that up and puts it in the browser tab.
-    -->
     <title>@ViewData["Title"] - EduTrip</title>
 
-    <!-- Bootstrap CSS — gives us buttons, cards, grid layout for free -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
 
-    <!-- Our custom colors using CSS variables from EduTrip brand -->
     <style>
         :root {
-            --edu-dark-blue:  #1F2A44;   /* "Trip" text color, navbar background */
-            --edu-mid-blue:   #3F8CCB;   /* "Edu" text color, primary buttons */
-            --edu-light-blue: #6FB3E0;   /* Card borders, hover states */
-            --edu-pale-blue:  #A9D3F0;   /* Highlights, backgrounds */
-            --edu-yellow:     #F4C542;   /* CTA buttons, badges */
+            --edu-dark-blue: #1F2A44;
+            --edu-mid-blue: #3F8CCB;
+            --edu-light-blue: #6FB3E0;
+            --edu-pale-blue: #A9D3F0;
+            --edu-yellow: #F4C542;
         }
 
-        /* Navbar styling */
+        /* ── Navbar ── */
         .navbar {
-            background-color: var(--edu-dark-blue); /* Dark navy navbar */
+            background-color: var(--edu-dark-blue);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+            padding: 10px 0;
         }
 
-        /* Brand name "Edu" is mid-blue, "Trip" is white */
-        .navbar-brand .edu  { color: var(--edu-mid-blue); font-weight: bold; }
-        .navbar-brand .trip { color: white; font-weight: bold; }
+        .navbar-brand img {
+            height: 42px;
+            transition: opacity 0.2s ease;
+        }
 
-        /* Primary action buttons use our brand mid-blue */
+            .navbar-brand img:hover {
+                opacity: 0.85;
+            }
+
+        /* Nav links */
+        .navbar .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+            .navbar .nav-link:hover {
+                background-color: rgba(255,255,255,0.1);
+                color: white !important;
+            }
+
+            .navbar .nav-link.active {
+                background-color: var(--edu-mid-blue);
+                color: white !important;
+            }
+
+        /* ── Buttons ── */
         .btn-edu {
             background-color: var(--edu-mid-blue);
             color: white;
             border: none;
-        }
-        .btn-edu:hover {
-            background-color: var(--edu-dark-blue); /* Darken on hover */
-            color: white;
+            border-radius: 8px;
+            transition: background 0.2s;
         }
 
-        /* Yellow CTA button (Book Now, Pay Now, etc.) */
+            .btn-edu:hover {
+                background-color: var(--edu-dark-blue);
+                color: white;
+            }
+
         .btn-cta {
             background-color: var(--edu-yellow);
             color: var(--edu-dark-blue);
             font-weight: bold;
             border: none;
+            border-radius: 8px;
+            transition: filter 0.2s;
         }
 
-        /* Mentor cards get a light-blue left border as accent */
+            .btn-cta:hover {
+                filter: brightness(0.92);
+                color: var(--edu-dark-blue);
+            }
+
+        /* ── Cards ── */
         .mentor-card {
             border-left: 4px solid var(--edu-light-blue);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
+            .mentor-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 20px rgba(63,140,203,0.15);
+            }
+
+        /* ── Main content spacing ── */
+        body {
+            background-color: #f5f8fb;
+            color: var(--edu-dark-blue);
+        }
+
+        main {
+            min-height: calc(100vh - 160px);
+        }
+
+        /* ── Footer ── */
+        footer {
+            background-color: var(--edu-dark-blue);
+            color: rgba(255,255,255,0.8);
+        }
+
+            footer p {
+                margin: 0;
+                font-size: 0.9rem;
+            }
     </style>
 </head>
 
 <body>
-    <!-- ===== NAVBAR (appears on every page because it's in _Layout) ===== -->
+
+    <!-- ===== NAVBAR ===== -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
 
-            <!-- Logo/Brand — clicking it goes to Home page -->
+            <!-- ✅ LOGO — links back to Home -->
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                <span class="edu">Edu</span><span class="trip">Trip</span>
+                <img src="~/edutriplastlogo.png" alt="EduTrip" />
             </a>
 
-            <!-- Navigation Links -->
-            <div class="navbar-nav ms-auto">
-                <!-- asp-controller and asp-action generate the URL automatically -->
-                <!-- asp-controller="Mentor" asp-action="Index" → /Mentor/Index -->
-                <a class="nav-link text-white" asp-controller="Mentor" asp-action="Index">
-                    Browse Mentors
-                </a>
-                <a class="nav-link text-white" asp-controller="Dashboard" asp-action="Index">
-                    My Bookings
-                </a>
+            <!-- Mobile hamburger toggle -->
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav links -->
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Mentor" asp-action="Index">
+                            <i class="bi bi-people me-1"></i>Browse Mentors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+                            <i class="bi bi-calendar-check me-1"></i>My Bookings
+                        </a>
+                    </li>
+                </ul>
             </div>
+
         </div>
     </nav>
 
-    <!-- ===== MAIN CONTENT (each page injects its HTML here) ===== -->
-    <main class="container mt-4">
-        <!--
-            @RenderBody() is the MAGIC LINE.
-            Whatever HTML is in Index.cshtml, Details.cshtml, etc.
-            gets inserted RIGHT HERE at runtime.
-            The layout is the frame, RenderBody is the picture inside.
-        -->
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="container mt-4 mb-5">
         @RenderBody()
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="text-center py-4 mt-5" style="background-color: var(--edu-dark-blue); color: white;">
-        <p>© 2024 EduTrip — Your Journey, Your Mentor</p>
+    <footer class="text-center py-4 mt-5">
+        <p>© 2026 EduTrip — Your Journey, Your Mentor</p>
     </footer>
 
-    <!-- Bootstrap JS (needed for dropdowns, modals, etc.) -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!--
-        @RenderSection("Scripts", required: false)
-        Some pages need extra JavaScript (like the booking page).
-        This lets individual pages add their own <script> tags
-        without putting them on EVERY page.
-    -->
     @RenderSection("Scripts", required: false)
 </body>
 </html>
