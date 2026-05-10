@@ -1,8 +1,79 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- ===== HERO SECTION ===== -->
+<div class="text-center py-5" style="background: linear-gradient(135deg, #1F2A44, #3F8CCB); border-radius: 16px; color: white;">
+
+    <h1 style="font-size: 3rem; font-weight: 800;">
+        <!-- The brand logo replicated in the hero -->
+        <span style="color: #A9D3F0;">Edu</span>Trip
+    </h1>
+
+    <p class="lead mt-3">
+        Connect with expert mentors for CV reviews, mock interviews, and university applications.
+    </p>
+
+   
+    <a class="btn btn-cta btn-lg mt-3"
+       asp-controller="Mentor"
+       asp-action="Index">
+         Browse Mentors
+    </a>
+</div>
+
+<!-- ===== STATS ROW ===== -->
+<div class="row text-center mt-5">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4">
+            <h2 style="color: #3F8CCB; font-size: 3rem; font-weight: bold;">
+                <!--
+                    @ViewBag.MentorCount reads the value we set in HomeController.
+                    Controller said: ViewBag.MentorCount = 12
+                    View shows: 12
+                -->
+                @ViewBag.MentorCount
+            </h2>
+            <p class="text-muted">Approved Mentors</p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4">
+            <h2 style="color: #3F8CCB; font-size: 3rem; font-weight: bold;">
+                @ViewBag.StudentCount
+            </h2>
+            <p class="text-muted">Students Enrolled</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== HOW IT WORKS ===== -->
+<div class="mt-5">
+    <h3 class="text-center mb-4" style="color: #1F2A44;">How EduTrip Works</h3>
+    <div class="row">
+
+        <!-- Step 1 -->
+        <div class="col-md-4 text-center">
+            <div style="font-size: 3rem;"> </div>
+            <h5>1. Browse Mentors</h5>
+            <p class="text-muted">Explore verified mentors by specialty and hourly rate.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="col-md-4 text-center">
+            <div style="font-size: 3rem;"></div>
+            <h5>2. Book a Session</h5>
+            <p class="text-muted">Pick a time slot that works for your schedule.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="col-md-4 text-center">
+            <div style="font-size: 3rem;"></div>
+            <h5>3. Level Up</h5>
+            <p class="text-muted">Get personalized guidance for your applications.</p>
+        </div>
+    </div>
 </div>
