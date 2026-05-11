@@ -1,33 +1,27 @@
 ﻿@model EduTrip.Models.Booking
-
 @{
     ViewData["Title"] = "Success - EduTrip";
 }
 
 <div class="text-center py-5">
 
-    <div class="mb-3" style="font-size:5.5rem; color: #28a745;">
-        <i class="bi bi-check-circle-fill"></i> ✅
-    </div>
+    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
 
-    <h2 style="color:#1F2A44; font-weight: 700;">Booking Confirmed</h2>
+    <h2 style="color:#1F2A44; font-weight: 700;" class="mt-3">Booking Confirmed</h2>
     <p class="lead text-muted">Your session has been successfully scheduled and confirmed.</p>
 
     <div class="card shadow-sm mx-auto mt-4" style="max-width:550px; border-left: 5px solid #F4C542; border-radius: 12px;">
         <div class="card-body p-4 text-start">
             <h5 class="fw-bold mb-3" style="color:#1F2A44;">Reservation Summary</h5>
             <hr />
-
             <div class="mb-2">
                 <strong>Mentor:</strong>
                 <span>@Model.Mentor?.User?.FirstName @Model.Mentor?.User?.LastName</span>
             </div>
-
             <div class="mb-2">
                 <strong>Schedule:</strong>
                 <span>@Model.Availability?.DayOfWeek, @Model.Availability?.StartTime.ToString(@"hh\:mm") – @Model.Availability?.EndTime.ToString(@"hh\:mm")</span>
             </div>
-
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
                     <strong>Status:</strong>
