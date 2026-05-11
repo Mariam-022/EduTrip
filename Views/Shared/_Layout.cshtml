@@ -27,7 +27,7 @@
         }
 
         .navbar-brand img {
-            height: 42px;
+            height: 50px;
             transition: opacity 0.2s ease;
         }
 
@@ -53,7 +53,16 @@
                 background-color: var(--edu-mid-blue);
                 color: white !important;
             }
+        /* Brand name "Edu" is mid-blue, "Trip" is white */
+        .navbar-brand .edu {
+            color: var(--edu-mid-blue);
+            font-weight: bold;
+        }
 
+        .navbar-brand .trip {
+            color: white;
+            font-weight: bold;
+        }
         /* ── Buttons ── */
         .btn-edu {
             background-color: var(--edu-mid-blue);
@@ -123,8 +132,19 @@
         <div class="container">
 
             <!-- ✅ LOGO — links back to Home -->
+<a class="navbar-brand d-flex align-items-center"
+   asp-controller="Home"
+   asp-action="Index">
+
+    <img src="~/logo5.png"
+         alt="EduTrip Logo"
+         style="height:100px; width: 50; object-fit: contain;" />
+
+    
+</a>
+            <!-- Logo/Brand — clicking it goes to Home page -->
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                <img src="~/edutriplastlogo.png" alt="EduTrip" />
+                <span class="edu">Edu</span><span class="trip">Trip</span>
             </a>
 
             <!-- Mobile hamburger toggle -->
